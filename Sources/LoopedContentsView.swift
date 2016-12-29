@@ -11,43 +11,43 @@ import Foundation
 
 public protocol LoopedContentsViewDataSource {
     /// Return 
-    func loopedContentsViewNumberOfContents(loopedContentsView: LoopedContentsView) -> Int
-    func loopedContentsView(loopedContentsView: LoopedContentsView, cellAtIndex index: Int) -> LoopedContentsViewCell
+    func loopedContentsViewNumberOfContents(_ loopedContentsView: LoopedContentsView) -> Int
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, cellAtIndex index: Int) -> LoopedContentsViewCell
 }
 
 public protocol LoopedContentsViewDelegate {
     // Required
-    func loopedContentsView(loopedContentsView: LoopedContentsView, lengthOfContentAtIndex index: Int) -> CGFloat
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, lengthOfContentAtIndex index: Int) -> CGFloat
     // Optional
-    func loopedContentsView(loopedContentsView: LoopedContentsView, willSelectContentAtIndex index: Int)
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didSelectContentAtIndex index: Int)
-    func loopedContentsView(loopedContentsView: LoopedContentsView, willDeselectContentAtIndex index: Int)
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didDeselectContentAtIndex index: Int)
-    func loopedContentsView(loopedContentsView: LoopedContentsView, willDisplayCell cell: LoopedContentsViewCell, forItemAtIndex index: Int)
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didEndDisplaying cell: LoopedContentsViewCell, forItemAtIndex index: Int)
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didFocusCell cell: LoopedContentsViewCell, forItemAtIndex index: Int)
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, willSelectContentAtIndex index: Int)
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didSelectContentAtIndex index: Int)
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, willDeselectContentAtIndex index: Int)
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didDeselectContentAtIndex index: Int)
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, willDisplayCell cell: LoopedContentsViewCell, forItemAtIndex index: Int)
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didEndDisplaying cell: LoopedContentsViewCell, forItemAtIndex index: Int)
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didFocusCell cell: LoopedContentsViewCell, forItemAtIndex index: Int)
 }
 
 extension LoopedContentsViewDelegate {
-    func loopedContentsView(loopedContentsView: LoopedContentsView, willSelectContentAtIndex index: Int) { }
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didSelectContentAtIndex index: Int) { }
-    func loopedContentsView(loopedContentsView: LoopedContentsView, willDeselectContentAtIndex index: Int) { }
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didDeselectContentAtIndex index: Int) { }
-    func loopedContentsView(loopedContentsView: LoopedContentsView, willDisplayCell cell: LoopedContentsViewCell, forItemAtIndex index: Int) { }
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didEndDisplaying cell: LoopedContentsViewCell, forItemAtIndex index: Int) { }
-    func loopedContentsView(loopedContentsView: LoopedContentsView, didFocusCell cell: LoopedContentsViewCell, forItemAtIndex index: Int) { }
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, willSelectContentAtIndex index: Int) { }
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didSelectContentAtIndex index: Int) { }
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, willDeselectContentAtIndex index: Int) { }
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didDeselectContentAtIndex index: Int) { }
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, willDisplayCell cell: LoopedContentsViewCell, forItemAtIndex index: Int) { }
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didEndDisplaying cell: LoopedContentsViewCell, forItemAtIndex index: Int) { }
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, didFocusCell cell: LoopedContentsViewCell, forItemAtIndex index: Int) { }
 }
 
-public class LoopedContentsView: UIView, UIScrollViewDelegate {
+open class LoopedContentsView: UIView, UIScrollViewDelegate {
     
     // MARK: Constants
     
     public enum Orientation {
-        case Horizontal
-        case Vertical
+        case horizontal
+        case vertical
     }
     
-    private struct Constants {
+    fileprivate struct Constants {
         
         static let ScrollLength: CGFloat = 1.0E+7
         static let DefaultScrollEndDraggingFactor: CGFloat = 350.0
@@ -75,51 +75,51 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
     
     // MARK: Element
     
-    public var delegate: LoopedContentsViewDelegate? = nil
+    open var delegate: LoopedContentsViewDelegate? = nil
     
-    public var dataSource: LoopedContentsViewDataSource? = nil
+    open var dataSource: LoopedContentsViewDataSource? = nil
     
-    public var allowsMultipleSelection: Bool = false
+    open var allowsMultipleSelection: Bool = false
     
-    public var pagingEnabled: Bool = true
+    open var pagingEnabled: Bool = true
     
-    public var scrollEndDraggingFactor: CGFloat = Constants.DefaultScrollEndDraggingFactor
+    open var scrollEndDraggingFactor: CGFloat = Constants.DefaultScrollEndDraggingFactor
     
-    public var cellTransform: ((range: CGFloat) -> CGAffineTransform)? = nil
+    open var cellTransform: ((_ range: CGFloat) -> CGAffineTransform)? = nil
     
-    public var cellAlpha: ((range: CGFloat) -> CGFloat)? = nil
+    open var cellAlpha: ((_ range: CGFloat) -> CGFloat)? = nil
     
-    private var totalItemLength: CGFloat = 0.0
+    fileprivate var totalItemLength: CGFloat = 0.0
     
-    private var numberOfItems: Int = 0
+    fileprivate var numberOfItems: Int = 0
     
-    private var lengthOfItems: [CGFloat] = []
+    fileprivate var lengthOfItems: [CGFloat] = []
     
-    private var activeCells: [Int: LoopedContentsViewCell] = [:]
+    fileprivate var activeCells: [Int: LoopedContentsViewCell] = [:]
     
-    private var reusedClassStore: [String: AnyClass] = [:]
+    fileprivate var reusedClassStore: [String: AnyClass] = [:]
     
-    private var reusedCellStore: [String: [LoopedContentsViewCell]] = [:]
+    fileprivate var reusedCellStore: [String: [LoopedContentsViewCell]] = [:]
     
-    private var visibleCellIndexSet: Set<Int> = Set<Int>()
+    fileprivate var visibleCellIndexSet: Set<Int> = Set<Int>()
     
-    private var selectedItemIndexSet: Set<Int> = Set<Int>()
+    fileprivate var selectedItemIndexSet: Set<Int> = Set<Int>()
     
-    private var centerItem: (itemIndex: Int, index: Int, origin: CGFloat) = (0, 0, 0.0)
+    fileprivate var centerItem: (itemIndex: Int, index: Int, origin: CGFloat) = (0, 0, 0.0)
     
-    private lazy var scrollView: UIScrollView = {
+    fileprivate lazy var scrollView: UIScrollView = {
         let frame: CGRect = self.bounds
         let scrollView: UIScrollView = UIScrollView(frame: frame)
-        scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.contentSize = self.contentSize
-        scrollView.exclusiveTouch = true
+        scrollView.isExclusiveTouch = true
         return scrollView
     }()
     
-    public lazy var horizontalScrollIndicator: UIView  = {
+    open lazy var horizontalScrollIndicator: UIView  = {
         let frame: CGRect = CGRect(x: 0.0, y: 0.0, width: 4.0, height: 4.0)
         let view: UIView = UIView(frame: frame)
         view.frame = frame
@@ -127,35 +127,35 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         view.layer.masksToBounds = true
         view.backgroundColor = Constants.DefaultIndicatorColor
         view.alpha = 0.0
-        view.hidden = true
+        view.isHidden = true
         return view
     }()
     
-    public lazy var verticalScrollIndicator: UIView  = {
+    open lazy var verticalScrollIndicator: UIView  = {
         let frame: CGRect = CGRect(x: 0.0, y: 0.0, width: 4.0, height: 4.0)
         let view: UIView = UIView(frame: frame)
         view.frame = frame
         view.layer.cornerRadius = 2.0
         view.layer.masksToBounds = true
-        view.backgroundColor = UIColor.grayColor()
+        view.backgroundColor = UIColor.gray
         view.alpha = 0.0
-        view.hidden = true
+        view.isHidden = true
         return view
     }()
     
     // MARK: Access
     
-    func next(itemIndex itemIndex: Int) -> Int {
+    func next(itemIndex: Int) -> Int {
         return itemIndex == self.numberOfItems - 1 ? 0 : itemIndex + 1
     }
     
-    func previous(itemIndex itemIndex: Int) -> Int {
+    func previous(itemIndex: Int) -> Int {
         return itemIndex == 0 ? self.numberOfItems - 1 : itemIndex - 1
     }
     
     // MARK: Computed Variable
     
-    private var horizontalScrollIndicatorCenter: CGPoint {
+    fileprivate var horizontalScrollIndicatorCenter: CGPoint {
         let ratio: CGFloat = self.scrollView.contentOffset.x/(self.scrollView.contentSize.width - self.scrollView.frame.size.width)
         let center: CGPoint = {
             let indicatorSize: CGSize = self.horizontalScrollIndicator.frame.size
@@ -166,7 +166,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         return center
     }
     
-    private var verticalScrollIndicatorCenter: CGPoint {
+    fileprivate var verticalScrollIndicatorCenter: CGPoint {
         let ratio: CGFloat = self.scrollView.contentOffset.y/(self.scrollView.contentSize.height - self.scrollView.frame.size.height)
         let center: CGPoint = {
             let indicatorSize: CGSize = self.horizontalScrollIndicator.frame.size
@@ -177,16 +177,16 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         return center
     }
 
-    public var selectedIndexSet: Set<Int> {
+    open var selectedIndexSet: Set<Int> {
         return self.selectedItemIndexSet
     }
     
-    public var scrollPosition : CGFloat {
+    open var scrollPosition : CGFloat {
         get {
             switch self.orientation {
-            case .Horizontal:
+            case .horizontal:
                 return self.scrollView.contentOffset.x + (self.frame.size.width - Constants.ScrollLength)/2.0
-            case .Vertical:
+            case .vertical:
                 return self.scrollView.contentOffset.y + self.frame.size.height/2.0 - Constants.ScrollLength/2.0
             }
         }
@@ -195,7 +195,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         }
     }
     
-    public var orientation: Orientation = .Horizontal {
+    open var orientation: Orientation = .horizontal {
         didSet {
             self.scrollView.contentSize = self.contentSize
             self.horizontalScrollIndicator.alpha = 0.0
@@ -204,25 +204,25 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private var contentSize: CGSize {
+    fileprivate var contentSize: CGSize {
         switch self.orientation {
-        case .Horizontal:
+        case .horizontal:
             return CGSize(width: Constants.ScrollLength, height: self.frame.height)
-        case .Vertical:
+        case .vertical:
             return CGSize(width: self.frame.height, height: Constants.ScrollLength)
         }
     }
     
-    private var controlledScrollIndicator: UIView {
+    fileprivate var controlledScrollIndicator: UIView {
         switch self.orientation {
-        case .Horizontal:
+        case .horizontal:
             return self.horizontalScrollIndicator
-        case .Vertical:
+        case .vertical:
             return self.verticalScrollIndicator
         }
     }
     
-    override public var frame: CGRect {
+    override open var frame: CGRect {
         didSet {
             self.updateVisibleCells()
         }
@@ -230,18 +230,18 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
     
     // MARK: Control
     
-    public func setScrollPosition(position: CGFloat, animated: Bool) {
+    open func setScrollPosition(_ position: CGFloat, animated: Bool) {
         let offset: CGPoint
         switch self.orientation {
-        case .Horizontal:
+        case .horizontal:
             offset = CGPoint(x: (Constants.ScrollLength - self.frame.size.width)/2.0 + position, y: 0.0)
-        case .Vertical:
+        case .vertical:
             offset = CGPoint(x: 0.0, y: (Constants.ScrollLength - self.frame.size.height)/2.0 + position)
         }
         self.scrollView.setContentOffset(offset, animated: animated)
     }
     
-    public func selectItem(atIndex index: Int, animated: Bool) {
+    open func selectItem(atIndex index: Int, animated: Bool) {
         
         // Deselect Item if Multiple Selectin is Not Allowed
         if !self.allowsMultipleSelection {
@@ -275,7 +275,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         }
     }
     
-    public func deselectItem(atIndex index: Int, animated: Bool) {
+    open func deselectItem(atIndex index: Int, animated: Bool) {
         
         let willDeselect: Bool = self.selectedItemIndexSet.contains(index)
         if !willDeselect {
@@ -299,22 +299,22 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func adjustScrollIndicator() {
+    fileprivate func adjustScrollIndicator() {
         switch self.orientation {
-        case .Horizontal:
+        case .horizontal:
             self.horizontalScrollIndicator.center = self.horizontalScrollIndicatorCenter
-        case .Vertical:
+        case .vertical:
             self.verticalScrollIndicator.center = self.verticalScrollIndicatorCenter
         }
     }
     
     // MARK: Reuse
     
-    public func registerClass(class _class: AnyClass, forCellReuseIdentifier identifier: String) {
+    open func registerClass(class _class: AnyClass, forCellReuseIdentifier identifier: String) {
         self.reusedClassStore[identifier] = _class
     }
     
-    public func dequeueReusableCellWithIdentifier(identifier: String) -> LoopedContentsViewCell {
+    open func dequeueReusableCellWithIdentifier(_ identifier: String) -> LoopedContentsViewCell {
     
         let _class: LoopedContentsViewCell.Type? = self.reusedClassStore[identifier] as? LoopedContentsViewCell.Type
         if _class == nil {
@@ -335,7 +335,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
     
     // MARK: Update
     
-    public func reloadData() {
+    open func reloadData() {
         
         self.numberOfItems = self.dataSource?.loopedContentsViewNumberOfContents(self) ?? 0
         self.lengthOfItems = (0..<self.numberOfItems).map { (index: Int) -> CGFloat in
@@ -350,7 +350,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         self.updateVisibleCells()
     }
     
-    private func updateVisibleCells() {
+    fileprivate func updateVisibleCells() {
         
         if self.numberOfItems <= 0 {
             return
@@ -369,7 +369,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         self.centerItem = {
             var value: CGFloat = position - self.totalItemLength*CGFloat(multiple)
             if value >= 0 {
-                for (itemIndex, length) in self.lengthOfItems.enumerate() {
+                for (itemIndex, length) in self.lengthOfItems.enumerated() {
                     if value - length <= 0 {
                         return (itemIndex, itemIndex + self.numberOfItems*multiple, -value)
                     }
@@ -377,7 +377,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
                 }
             } else {
                 value = abs(value)
-                for (itemIndex, length) in self.lengthOfItems.reverse().enumerate() {
+                for (itemIndex, length) in self.lengthOfItems.reversed().enumerated() {
                     value = value - length
                     if value <= 0 {
                         let _itemIndex: Int = self.numberOfItems - itemIndex - 1
@@ -410,7 +410,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
             while origin > -self.frame.size.width/2.0 {
                 itemIndex = self.previous(itemIndex: itemIndex)
                 origin = origin - self.lengthOfItems[itemIndex]
-                indexes.insert(itemIndex, atIndex: 0)
+                indexes.insert(itemIndex, at: 0)
             }
             return indexes
         }()
@@ -418,26 +418,26 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         let itemIndexes: [Int] = previousItemIndexes + [self.centerItem.itemIndex] + nextItemIndexes
         
         // Get Visible Indexes in Whole Scroll View
-        let previousIndexes: [Int] = (0..<(previousItemIndexes.count)).enumerate().map { (index: Int, value: Int) -> Int in
+        let previousIndexes: [Int] = (0..<(previousItemIndexes.count)).enumerated().map { (index: Int, value: Int) -> Int in
             return self.centerItem.index - index - 1
-        }.reverse()
-        let nextIndexes: [Int] = (0..<(nextItemIndexes.count)).enumerate().map { (index: Int, value: Int) -> Int in
+        }.reversed()
+        let nextIndexes: [Int] = (0..<(nextItemIndexes.count)).enumerated().map { (index: Int, value: Int) -> Int in
             return self.centerItem.index + index + 1
         }
         
         // Get New/Disable Cell Indexes
         let indexes: [Int] = previousIndexes + [self.centerItem.index] + nextIndexes
         let indexSet: Set<Int> = Set(indexes)
-        let newCellIndexSet: Set<Int> = indexSet.subtract(self.visibleCellIndexSet)
-        let disableCellIndexSet: Set<Int> = self.visibleCellIndexSet.subtract(indexSet)
+        let newCellIndexSet: Set<Int> = indexSet.subtracting(self.visibleCellIndexSet)
+        let disableCellIndexSet: Set<Int> = self.visibleCellIndexSet.subtracting(indexSet)
         self.visibleCellIndexSet = indexSet
         
         // Convert Origin Value for Scroll View
         origin = {
             switch self.orientation {
-            case .Horizontal:
+            case .horizontal:
                 return origin + self.scrollView.contentOffset.x + self.frame.size.width/2.0
-            case .Vertical:
+            case .vertical:
                 return origin + self.scrollView.contentOffset.y + self.frame.size.height/2.0
             }
         }()
@@ -448,9 +448,9 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
             for index in itemIndexes {
                 let frame: CGRect
                 switch self.orientation {
-                case .Horizontal:
+                case .horizontal:
                     frame = CGRect(x: origin, y: 0.0, width: self.lengthOfItems[index], height: self.frame.size.height)
-                case .Vertical:
+                case .vertical:
                     frame = CGRect(x: 0.0, y: origin, width: self.frame.size.width, height: self.lengthOfItems[index])
                 }
                 frames.append(frame)
@@ -460,7 +460,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
         }()
         
         // Update Cell Frame
-        for (_index, itemIndex) in itemIndexes.enumerate() {
+        for (_index, itemIndex) in itemIndexes.enumerated() {
                         
             let index: Int = indexes[_index]
             let frame: CGRect = frames[_index]
@@ -507,7 +507,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
                 }
 
                 // Store Reusable Cell
-                let name: String = NSStringFromClass(cell.dynamicType) as String
+                let name: String = NSStringFromClass(type(of: cell)) as String
                 
                 var cells: [LoopedContentsViewCell] = []
                 if let storedCells: [LoopedContentsViewCell] = self.reusedCellStore[name] {
@@ -527,18 +527,18 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
                 
                 let range: CGFloat = {
                     switch self.orientation {
-                    case .Horizontal:
-                        return CGRectGetMidX(cell.frame) - self.scrollView.contentOffset.x - self.scrollView.frame.size.width/2.0
-                    case .Vertical:
-                        return CGRectGetMidY(cell.frame) - self.scrollView.contentOffset.y - self.scrollView.frame.size.height/2.0
+                    case .horizontal:
+                        return cell.frame.midX - self.scrollView.contentOffset.x - self.scrollView.frame.size.width/2.0
+                    case .vertical:
+                        return cell.frame.midY - self.scrollView.contentOffset.y - self.scrollView.frame.size.height/2.0
                     }
                 }()
                 
-                if let cellTransform: ((range: CGFloat) -> CGAffineTransform) = self.cellTransform {
-                    cell.contentView.transform = cellTransform(range: range)
+                if let cellTransform: ((_ range: CGFloat) -> CGAffineTransform) = self.cellTransform {
+                    cell.contentView.transform = cellTransform(range)
                 }
-                if let cellAlpha: ((range: CGFloat) -> CGFloat) = self.cellAlpha {
-                    cell.contentView.alpha = cellAlpha(range: range)
+                if let cellAlpha: ((_ range: CGFloat) -> CGFloat) = self.cellAlpha {
+                    cell.contentView.alpha = cellAlpha(range)
                 }
                 
             }
@@ -547,7 +547,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
     
     // MARK: Gesture
     
-    func onCellTapped(sender: UITapGestureRecognizer) {
+    func onCellTapped(_ sender: UITapGestureRecognizer) {
         
         guard let cell: LoopedContentsViewCell = sender.view as? LoopedContentsViewCell else {
             return
@@ -564,38 +564,38 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
     
     // MARK: Scroll View Delegate
     
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
+    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         self.adjustScrollIndicator()
         self.updateVisibleCells()
     }
     
-    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         
         self.adjustScrollIndicator()
         self.controlledScrollIndicator.alpha = 1.0
     }
     
-    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
         // Cell Did Focus
-        if let delegate: LoopedContentsViewDelegate = self.delegate, cell: LoopedContentsViewCell = self.activeCells[self.centerItem.index] {
+        if let delegate: LoopedContentsViewDelegate = self.delegate, let cell: LoopedContentsViewCell = self.activeCells[self.centerItem.index] {
             delegate.loopedContentsView(self, didFocusCell: cell, forItemAtIndex: centerItem.itemIndex)
         }
         
-        UIView.animateWithDuration(0.2, animations: {
+        UIView.animate(withDuration: 0.2, animations: {
             self.controlledScrollIndicator.alpha = 0.0
         })
     }
     
-    public func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    open func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
         if !self.pagingEnabled {
             return
         }
         
         switch self.orientation {
-        case .Horizontal:
+        case .horizontal:
             
             let middle: CGFloat = self.scrollView.contentOffset.x + self.frame.size.width/2.0
             let target: CGFloat = middle + self.centerItem.origin + self.scrollEndDraggingFactor*velocity.x
@@ -605,7 +605,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
                 while true {
                     let nextLength: CGFloat = self.lengthOfItems[self.next(itemIndex: current.index)]
                     if current.x + nextLength >= target {
-                        targetContentOffset.memory.x = current.x + nextLength/2.0 - self.frame.size.width/2.0
+                        targetContentOffset.pointee.x = current.x + nextLength/2.0 - self.frame.size.width/2.0
                         return
                     }
                     current.index = self.next(itemIndex: current.index)
@@ -615,14 +615,14 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
                 while true {
                     let previousLength: CGFloat = self.lengthOfItems[self.previous(itemIndex: current.index)]
                     if current.x - previousLength <= target {
-                        targetContentOffset.memory.x = current.x + previousLength/2.0 - self.frame.size.width/2.0
+                        targetContentOffset.pointee.x = current.x + previousLength/2.0 - self.frame.size.width/2.0
                         return
                     }
                     current.index = self.previous(itemIndex: current.index)
                     current.x = current.x - previousLength
                 }
             }
-        case .Vertical:
+        case .vertical:
             
             let middle: CGFloat = self.scrollView.contentOffset.y + self.frame.size.height/2.0
             let target: CGFloat = middle + self.centerItem.origin + self.scrollEndDraggingFactor*velocity.y
@@ -632,7 +632,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
                 while true {
                     let nextLength: CGFloat = self.lengthOfItems[self.next(itemIndex: current.index)]
                     if current.y + nextLength >= target {
-                        targetContentOffset.memory.y = current.y + nextLength/2.0 - self.frame.size.height/2.0
+                        targetContentOffset.pointee.y = current.y + nextLength/2.0 - self.frame.size.height/2.0
                         return
                     }
                     current.index = self.next(itemIndex: current.index)
@@ -642,7 +642,7 @@ public class LoopedContentsView: UIView, UIScrollViewDelegate {
                 while true {
                     let previousLength: CGFloat = self.lengthOfItems[self.previous(itemIndex: current.index)]
                     if current.y - previousLength <= target {
-                        targetContentOffset.memory.y = current.y + previousLength/2.0 - self.frame.size.height/2.0
+                        targetContentOffset.pointee.y = current.y + previousLength/2.0 - self.frame.size.height/2.0
                         return
                     }
                     current.index = self.previous(itemIndex: current.index)

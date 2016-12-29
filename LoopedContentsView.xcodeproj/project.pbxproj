@@ -109,6 +109,7 @@
 				TargetAttributes = {
 					4369EE781D6C38A600A8388B = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -256,6 +257,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jpn.naru.LoopedContentsView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -272,6 +274,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jpn.naru.LoopedContentsView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class LoopedContentsViewCell: UIView {
+open class LoopedContentsViewCell: UIView {
     
     // MARK: Constants
     
@@ -17,14 +17,14 @@ public class LoopedContentsViewCell: UIView {
         case selected
     }
     
-    private struct Constants {
+    fileprivate struct Constants {
         static let DefaultSelectedColor: UIColor = UIColor(white: 0.9, alpha: 1.0)
     }
     
     // MARK: Life Cycle
     
     public required convenience init() {
-        self.init(frame: UIScreen.mainScreen().bounds)
+        self.init(frame: UIScreen.main.bounds)
     }
     
     override init(frame: CGRect) {
@@ -41,21 +41,21 @@ public class LoopedContentsViewCell: UIView {
     
     // MARK: Elements
     
-    public var index: Int = 0
+    open var index: Int = 0
     
-    public var itemIndex: Int = 0
+    open var itemIndex: Int = 0
     
-    private(set) var selected: Bool = false
+    fileprivate(set) var selected: Bool = false
     
-    public lazy var contentView: UIView = {
+    open lazy var contentView: UIView = {
         let view: UIView = UIView(frame: self.bounds)
-        view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return view
     }()
     
-    private var backgroundColors: [State: UIColor] = [:]
+    fileprivate var backgroundColors: [State: UIColor] = [:]
     
-    private var state: State {
+    fileprivate var state: State {
         if self.selected {
             return .selected
         } else {
@@ -65,11 +65,11 @@ public class LoopedContentsViewCell: UIView {
     
     // MARK: Control
     
-    private func updateBackgroundColor(animated: Bool) {
+    fileprivate func updateBackgroundColor(_ animated: Bool) {
         
-        let color: CGColor? = self.backgroundColors[self.state]?.CGColor
+        let color: CGColor? = self.backgroundColors[self.state]?.cgColor
         if animated {
-            UIView.animateWithDuration(0.2, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 self.layer.backgroundColor = color
             })
         } else {
@@ -77,7 +77,7 @@ public class LoopedContentsViewCell: UIView {
         }
     }
     
-    public func setBackgroundColor(backgroundColor: UIColor, forState state: State) {
+    open func setBackgroundColor(_ backgroundColor: UIColor, forState state: State) {
         
         self.backgroundColors[state] = backgroundColor
         if self.state == state {
@@ -85,7 +85,7 @@ public class LoopedContentsViewCell: UIView {
         }
     }
     
-    public func setSelected(selected: Bool, animated: Bool) -> Void {
+    open func setSelected(_ selected: Bool, animated: Bool) -> Void {
 
         self.selected = selected
         self.updateBackgroundColor(animated)

@@ -20,7 +20,7 @@ class ViewController: UIViewController, LoopedContentsViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         
         self.view.addSubview(self.contentsView)
         self.contentsView.reloadData()
@@ -33,8 +33,8 @@ class ViewController: UIViewController, LoopedContentsViewDelegate {
     }()
     
     private lazy var contentsView: LoopedContentsView = {
-        let origin: CGPoint = CGPoint(x: 0.0, y: (UIScreen.mainScreen().bounds.height - Constants.ContentSize.height)/2.0)
-        let frame: CGRect = CGRect(origin: origin, size: CGSize(width: UIScreen.mainScreen().bounds.width, height: Constants.ContentSize.height))
+        let origin: CGPoint = CGPoint(x: 0.0, y: (UIScreen.main.bounds.height - Constants.ContentSize.height)/2.0)
+        let frame: CGRect = CGRect(origin: origin, size: CGSize(width: UIScreen.main.bounds.width, height: Constants.ContentSize.height))
         let view: LoopedContentsView = LoopedContentsView(frame: frame)
         view.registerClass(class: CustomCell.self, forCellReuseIdentifier: "cell")
         view.delegate = self
@@ -44,7 +44,7 @@ class ViewController: UIViewController, LoopedContentsViewDelegate {
     
     // MARK: Delegate
     
-    func loopedContentsView(loopedContentsView: LoopedContentsView, lengthOfContentAtIndex index: Int) -> CGFloat {
+    func loopedContentsView(_ loopedContentsView: LoopedContentsView, lengthOfContentAtIndex index: Int) -> CGFloat {
         return Constants.ContentSize.width
     }
 }
